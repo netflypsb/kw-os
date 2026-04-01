@@ -1,6 +1,6 @@
 {
   "name": "kw-os",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Knowledge Worker Operating System — turn any IDE into an AI-powered knowledge worker with local MCP servers, skills, and prompt templates. Zero API keys required.",
   "type": "module",
   "main": "dist/cli.js",
