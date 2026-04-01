@@ -1,0 +1,233 @@
+{
+  "servers": {
+    "filesystem": {
+      "id": "filesystem",
+      "category": "core",
+      "type": "npm",
+      "package": "@modelcontextprotocol/server-filesystem",
+      "version": "latest",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
+      "apiRequired": false,
+      "description": "Secure file read/write/search operations"
+    },
+    "git": {
+      "id": "git",
+      "category": "core",
+      "type": "npm",
+      "package": "@modelcontextprotocol/server-git",
+      "version": "latest",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-git"],
+      "apiRequired": false,
+      "description": "Repository management — status, diff, log, blame"
+    },
+    "memory": {
+      "id": "memory",
+      "category": "core",
+      "type": "npm",
+      "package": "@modelcontextprotocol/server-memory",
+      "version": "latest",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "apiRequired": false,
+      "description": "Knowledge graph for persistent agent memory"
+    },
+    "fetch": {
+      "id": "fetch",
+      "category": "core",
+      "type": "npm",
+      "package": "@modelcontextprotocol/server-fetch",
+      "version": "latest",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"],
+      "apiRequired": false,
+      "description": "Web content fetching converted to Markdown"
+    },
+    "sequentialthinking": {
+      "id": "sequentialthinking",
+      "category": "core",
+      "type": "npm",
+      "package": "@modelcontextprotocol/server-sequentialthinking",
+      "version": "latest",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sequentialthinking"],
+      "apiRequired": false,
+      "description": "Multi-step problem-solving reasoning chains"
+    },
+    "time": {
+      "id": "time",
+      "category": "core",
+      "type": "npm",
+      "package": "@modelcontextprotocol/server-time",
+      "version": "latest",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-time"],
+      "apiRequired": false,
+      "description": "Timezone awareness and date manipulation"
+    },
+    "playwright": {
+      "id": "playwright",
+      "category": "browser",
+      "type": "npm",
+      "package": "@playwright/mcp",
+      "version": "latest",
+      "command": "npx",
+      "args": ["@playwright/mcp@latest"],
+      "apiRequired": false,
+      "description": "MCP-native browser automation — 35+ tools, accessibility-tree based"
+    },
+    "agent-browser": {
+      "id": "agent-browser",
+      "category": "browser",
+      "type": "cli",
+      "package": "agent-browser",
+      "installCmd": "npm install -g agent-browser",
+      "postInstall": "agent-browser install",
+      "apiRequired": false,
+      "description": "Fast Rust CLI browser automation for AI agents — snapshot-ref workflow"
+    },
+    "powerpoint": {
+      "id": "powerpoint",
+      "category": "office",
+      "type": "python",
+      "repo": "dmytro-ustynov/office-powerpoint-mcp-server",
+      "ref": "main",
+      "apiRequired": false,
+      "description": "Create/edit PowerPoint .pptx files locally via python-pptx"
+    },
+    "excel": {
+      "id": "excel",
+      "category": "office",
+      "type": "python",
+      "repo": "haris-musa/excel-mcp-server",
+      "ref": "main",
+      "apiRequired": false,
+      "description": "Full .xlsx manipulation — charts, pivot tables, formatting"
+    },
+    "word": {
+      "id": "word",
+      "category": "office",
+      "type": "python",
+      "repo": "jlowans/mcp-python-docx",
+      "ref": "main",
+      "apiRequired": false,
+      "description": "Create/edit .docx documents via python-docx"
+    },
+    "pdf-reader": {
+      "id": "pdf-reader",
+      "category": "office",
+      "type": "npm",
+      "package": "pdf-reader-mcp",
+      "version": "latest",
+      "command": "npx",
+      "args": ["-y", "pdf-reader-mcp"],
+      "apiRequired": false,
+      "description": "Extract text, images, and metadata from PDF files"
+    },
+    "markitdown": {
+      "id": "markitdown",
+      "category": "office",
+      "type": "python",
+      "repo": "microsoft/markitdown",
+      "ref": "main",
+      "apiRequired": false,
+      "description": "Convert any document (PDF/Office/HTML) to Markdown"
+    },
+    "chart": {
+      "id": "chart",
+      "category": "data",
+      "type": "npm",
+      "package": "@antv/mcp-server-chart",
+      "version": "latest",
+      "command": "npx",
+      "args": ["-y", "@antv/mcp-server-chart"],
+      "apiRequired": false,
+      "description": "Generate 26+ chart types — line, bar, pie, sankey, treemap, mind-map, etc."
+    },
+    "data-exploration": {
+      "id": "data-exploration",
+      "category": "data",
+      "type": "python",
+      "repo": "reading-plus-ai/mcp-server-data-exploration",
+      "ref": "main",
+      "apiRequired": false,
+      "description": "Autonomous CSV/dataset analysis with intelligent insights"
+    },
+    "vegalite": {
+      "id": "vegalite",
+      "category": "data",
+      "type": "npm",
+      "package": "mcp-vegalite-server",
+      "version": "latest",
+      "command": "npx",
+      "args": ["-y", "mcp-vegalite-server"],
+      "apiRequired": false,
+      "description": "Generate visualizations from data using Vega-Lite"
+    },
+    "hledger": {
+      "id": "hledger",
+      "category": "finance",
+      "type": "python",
+      "repo": "iiAtlas/hledger-mcp",
+      "ref": "main",
+      "apiRequired": false,
+      "description": "Double-entry bookkeeping — balance sheets, income statements"
+    },
+    "coincap": {
+      "id": "coincap",
+      "category": "finance",
+      "type": "npm",
+      "package": "coincap-mcp",
+      "version": "latest",
+      "command": "npx",
+      "args": ["-y", "coincap-mcp"],
+      "apiRequired": false,
+      "description": "Real-time cryptocurrency market data (public API, no auth)"
+    },
+    "web-search": {
+      "id": "web-search",
+      "category": "research",
+      "type": "npm",
+      "package": "web-search-mcp",
+      "version": "latest",
+      "command": "npx",
+      "args": ["-y", "web-search-mcp"],
+      "apiRequired": false,
+      "description": "Local web search and summaries via DuckDuckGo/Bing scraping"
+    },
+    "read-website-fast": {
+      "id": "read-website-fast",
+      "category": "research",
+      "type": "npm",
+      "package": "@just-every/mcp-read-website-fast",
+      "version": "latest",
+      "command": "npx",
+      "args": ["-y", "@just-every/mcp-read-website-fast"],
+      "apiRequired": false,
+      "description": "Token-efficient web page to clean Markdown conversion"
+    },
+    "json": {
+      "id": "json",
+      "category": "research",
+      "type": "npm",
+      "package": "json-mcp",
+      "version": "latest",
+      "command": "npx",
+      "args": ["-y", "json-mcp"],
+      "apiRequired": false,
+      "description": "Split, merge, and manipulate JSON files"
+    },
+    "imagician": {
+      "id": "imagician",
+      "category": "utils",
+      "type": "npm",
+      "package": "imagician",
+      "version": "latest",
+      "command": "npx",
+      "args": ["-y", "imagician"],
+      "apiRequired": false,
+      "description": "Image editing — resize, crop, format conversion via sharp"
+    }
+  }
+}
