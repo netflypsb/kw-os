@@ -41,6 +41,7 @@ kw-os add-skill <name>  # Install a specific skill
 kw-os list-skills       # List available professional skills
 kw-os doctor            # Diagnose and fix common issues
 kw-os test              # Run comprehensive test suite
+kw-os cleanup           # Remove obsolete server installations
 ```
 
 ### Test Suite
@@ -65,6 +66,18 @@ The `kw-os status` command provides a detailed health report showing:
 - Installation status for each MCP server
 - Server-specific error messages if any
 - Overall installation health score
+
+### Automatic Cleanup
+
+When you run `kw-os init` on an existing installation, it automatically:
+- Removes obsolete servers that are no longer in the registry
+- Cleans up renamed or removed server packages
+- Ensures a clean installation before upgrading
+
+For manual cleanup, run:
+```bash
+kw-os cleanup    # Remove old/obsolete server installations
+```
 
 ## Options
 

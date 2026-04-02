@@ -6,6 +6,7 @@ import { updateCommand } from './commands/update.js';
 import { listSkillsCommand } from './commands/list-skills.js';
 import { doctorCommand } from './commands/doctor.js';
 import { testCommand } from './commands/test.js';
+import { cleanupCommand } from './commands/cleanup.js';
 
 export const program = new Command();
 
@@ -56,3 +57,8 @@ program
   .option('--suite <name>', 'Run specific suite: env|registry|skills|build|install|health', 'all')
   .option('--verbose', 'Show detailed output for failures')
   .action(testCommand);
+
+program
+  .command('cleanup')
+  .description('Remove obsolete server installations and clean up old files')
+  .action(cleanupCommand);

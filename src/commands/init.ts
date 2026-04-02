@@ -50,7 +50,7 @@ export async function initCommand(options: InitOptions): Promise<void> {
   log.success(`Target IDE: ${ide}`);
 
   // Step 2: Install MCP Servers
-  log.header('Step 2: Install MCP Servers');
+  log.header('Step 2b: Install MCP Servers');
 
   const serverFilter = options.servers || 'all';
   let servers = resolveServerList(serverFilter);
@@ -63,6 +63,12 @@ export async function initCommand(options: InitOptions): Promise<void> {
 
   const installer = new ServerInstaller();
   await installer.ensureDirectories();
+
+  // Clean up any old/removed servers before installing new ones
+  if (env.existingInstall) {
+    log.header('Step 2a: Clean Up Old Versions');
+    await installer.cleanupOldServers();
+  }
 
   let installed = 0;
   let failed = 0;

@@ -260,4 +260,62 @@ export class ServerInstaller {
     const trackingFile = path.join(this.serversDir, '.installed', `${serverId}.json`);
     return fs.existsSync(trackingFile);
   }
+
+  /**
+   * Clean up older installations that are no longer in the registry
+   * This removes servers that were removed from servers.json or renamed
+   */
+  async cleanupOldServers(): Promise<void> {
+    const trackingDir = path.join(this.serversDir, '.installed');
+    if (!fs.existsSync(trackingDir)) {
+      return; // No tracking directory, nothing to clean
+    }
+
+    // Get current server IDs from registry
+    const { getAllServers } = await import('./server-registry.js');
+    const currentServers = getAllServers();
+    const currentIds = new Set(currentServers.map(s => s.id));
+
+    // Find old servers to remove
+    const trackingFiles = fs.readdirSync(trackingDir).filter(f => f.endsWith('.json'));
+    let cleaned = 0;
+
+    for (const file of trackingFiles) {
+      const serverId = file.replace('.json', '');
+      
+      if (!currentIds.has(serverId)) {
+        // This server is no longer in the registry, remove it
+        const trackingPath = path.join(trackingDir, file);
+        const serverDir = path.join(this.serversDir, 'core', serverId);
+        
+        try {
+          // Remove tracking file
+          fs.unlinkSync(trackingPath);
+          
+          // Remove server directory if it exists
+          if (fs.existsSync(serverDir)) {
+            fs.rmSync(serverDir, { recursive: true, force: true });
+          }
+          
+          // Also check other categories
+          const categories = ['browser', 'office', 'data', 'finance', 'research', 'utils'];
+          for (const cat of categories) {
+            const catServerDir = path.join(this.serversDir, cat, serverId);
+            if (fs.existsSync(catServerDir)) {
+              fs.rmSync(catServerDir, { recursive: true, force: true });
+            }
+          }
+          
+          cleaned++;
+          log.dim(`  Removed old server: ${serverId}`);
+        } catch (err) {
+          log.warn(`  Failed to remove old server ${serverId}: ${err}`);
+        }
+      }
+    }
+
+    if (cleaned > 0) {
+      log.success(`Cleaned up ${cleaned} obsolete server installations`);
+    }
+  }
 }
