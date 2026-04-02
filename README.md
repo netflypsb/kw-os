@@ -40,7 +40,31 @@ kw-os update            # Update servers and skills
 kw-os add-skill <name>  # Install a specific skill
 kw-os list-skills       # List available professional skills
 kw-os doctor            # Diagnose and fix common issues
+kw-os test              # Run comprehensive test suite
 ```
+
+### Test Suite
+
+The `kw-os test` command validates your installation with 6 test suites:
+
+```bash
+kw-os test                         # Run all tests (39 total)
+kw-os test --suite env              # Environment dependencies only
+kw-os test --suite registry         # Server registry validation
+kw-os test --suite skills           # Skills loading and metadata
+kw-os test --suite build            # TypeScript compilation check
+kw-os test --suite install          # Installation integrity
+kw-os test --suite health           # Individual server health checks
+kw-os test --verbose                # Show detailed failure output
+```
+
+### Health Check
+
+The `kw-os status` command provides a detailed health report showing:
+- Environment status (Node.js, Python, pip, uv/uvx, Git)
+- Installation status for each MCP server
+- Server-specific error messages if any
+- Overall installation health score
 
 ## Options
 
@@ -55,6 +79,8 @@ kw-os init --no-browser           # Skip browser automation setup
 
 - **Node.js** >= 18
 - **Python** >= 3.10
+- **pip** (Python package manager)
+- **uv/uvx** (recommended for Python packages) - Install from https://docs.astral.sh/uv/
 - **Git**
 
 ## Architecture
