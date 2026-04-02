@@ -141,3 +141,135 @@ export interface AddSkillOptions {
   force?: boolean;
   dryRun?: boolean;
 }
+
+// --- Phase 3: Document Processing Types ---
+
+export type DocumentFileType = 'pdf' | 'docx' | 'xlsx' | 'pptx' | 'html' | 'md' | 'txt' | 'csv' | 'json';
+
+export interface DocumentRecord {
+  id: string;
+  filename: string;
+  filepath: string | null;
+  filetype: DocumentFileType;
+  title: string | null;
+  total_chunks: number;
+  total_tokens: number;
+  ingested_at: string;
+  metadata: string;
+}
+
+export interface Chunk {
+  id: string;
+  doc_id: string;
+  chunk_index: number;
+  text: string;
+  start_offset: number;
+  end_offset: number;
+  section: string | null;
+  page_number: number | null;
+  token_count: number;
+  metadata: string;
+}
+
+export interface ChunkOptions {
+  maxChunkSize: number;
+  overlapSize: number;
+  respectBoundaries: boolean;
+}
+
+export interface EmbedderConfig {
+  provider: 'ollama' | 'llamacpp';
+  model: string;
+  dimensions: number;
+  batchSize: number;
+  baseUrl: string;
+}
+
+export interface ExtractedEntity {
+  name: string;
+  type: string;
+  description: string;
+}
+
+export interface ExtractedRelationship {
+  source: string;
+  target: string;
+  relationship: string;
+  context: string;
+}
+
+export interface EntityExtractionResult {
+  entities: ExtractedEntity[];
+  relationships: ExtractedRelationship[];
+}
+
+export interface EntityRecord {
+  id: number;
+  name: string;
+  type: string;
+  description: string | null;
+  doc_id: string | null;
+  chunk_ids: string;
+  metadata: string;
+}
+
+export interface RelationshipRecord {
+  id: number;
+  source_entity_id: number;
+  target_entity_id: number;
+  relationship: string;
+  weight: number;
+  doc_id: string | null;
+  chunk_id: string | null;
+  metadata: string;
+}
+
+export interface SearchResult {
+  id: string;
+  doc_id: string;
+  text: string;
+  section: string | null;
+  score: number;
+  chunk_index: number;
+}
+
+export interface SearchOptions {
+  limit: number;
+  docId?: string;
+  minScore?: number;
+}
+
+export interface GraphSearchResult {
+  entities: EntityRecord[];
+  relationships: RelationshipRecord[];
+  chunks: SearchResult[];
+}
+
+export interface IngestOptions {
+  title?: string;
+  extractEntities?: boolean;
+  generateEmbeddings?: boolean;
+}
+
+export interface RAGResult {
+  answer: string;
+  sources: Array<{
+    docId: string;
+    chunkId: string;
+    section: string | null;
+    relevance: number;
+  }>;
+  entities: EntityRecord[];
+}
+
+export interface RLMConfig {
+  maxDepth: number;
+  maxIterations: number;
+  timeout: number;
+}
+
+export interface RLMResult {
+  answer: string;
+  iterations: number;
+  codeExecutions: number;
+}
