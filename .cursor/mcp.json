@@ -1,0 +1,44 @@
+{
+  "mcpServers": {
+    "chart": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@antv/mcp-server-chart"
+      ]
+    },
+    "data-exploration": {
+      "command": "C:\\Users\\netfl\\.kw-os\\servers\\data\\data-exploration\\.venv\\Scripts\\python.exe",
+      "args": [
+        "C:\\Users\\netfl\\.kw-os\\servers\\data\\data-exploration\\src\\mcp_server_ds\\server.py"
+      ],
+      "env": {
+        "PYTHONPATH": "C:\\Users\\netfl\\.kw-os\\servers\\data\\data-exploration"
+      }
+    },
+    "hledger": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@iiatlas/hledger-mcp"
+      ]
+    },
+    "coincap": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "coincap-mcp"
+      ]
+    },
+    "kw-os-documents": {
+      "command": "node",
+      "args": [
+        "C:\\Users\\netfl\\Desktop\\NPX\\kw-os\\dist\\document\\mcp-server.js"
+      ],
+      "env": {
+        "KWOS_DB_PATH": "C:\\Users\\netfl\\.kw-os\\documents.db",
+        "KWOS_OLLAMA_URL": "http://localhost:11434"
+      }
+    }
+  }
+}

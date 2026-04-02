@@ -109,7 +109,7 @@ async function checkPythonServer(server: ServerEntry, status: ServerStatus): Pro
   }
 
   const isWin = process.platform === 'win32';
-  const pythonBin = path.join(venvDir, isWin ? 'Scripts' : 'bin', 'python');
+  const pythonBin = path.join(venvDir, isWin ? 'Scripts' : 'bin', isWin ? 'python.exe' : 'python');
 
   if (!fs.existsSync(pythonBin)) {
     status.error = 'Python binary not found in venv';
