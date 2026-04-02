@@ -228,6 +228,16 @@
       "args": ["-y", "imagician"],
       "apiRequired": false,
       "description": "Image editing — resize, crop, format conversion via sharp"
+    },
+    "kw-os-documents": {
+      "id": "kw-os-documents",
+      "category": "core",
+      "type": "npm",
+      "package": "kw-os",
+      "command": "node",
+      "args": [],
+      "apiRequired": false,
+      "description": "KW-OS Document Intelligence — ingest, query, and analyze documents of any size"
     }
   }
 }

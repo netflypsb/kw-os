@@ -172,6 +172,11 @@ export class DocumentStore {
       .all() as DocumentRecord[];
   }
 
+  findDocumentByPath(filepath: string): DocumentRecord | null {
+    return (this.db.prepare('SELECT * FROM documents WHERE filepath = ?')
+      .get(filepath) as DocumentRecord | undefined) ?? null;
+  }
+
   deleteDocument(docId: string): void {
     this.db.prepare('DELETE FROM documents WHERE id = ?').run(docId);
   }

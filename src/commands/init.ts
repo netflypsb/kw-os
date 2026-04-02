@@ -8,7 +8,10 @@ import { ServerInstaller } from '../core/server-installer.js';
 import { ConfigGenerator } from '../core/config-generator.js';
 import { installSkills, installMasterRule, installPrompts } from '../core/skill-installer.js';
 import { getProfile } from '../core/config-profiles.js';
+import { LocalEmbedder } from '../document/embedder.js';
 import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import type { KWOSConfig } from '../types/index.js';
 
 export async function initCommand(options: InitOptions): Promise<void> {
@@ -90,6 +93,18 @@ export async function initCommand(options: InitOptions): Promise<void> {
   const configGen = new ConfigGenerator();
   const mcpConfig = configGen.generateConfig(servers);
 
+  // Inject kw-os-documents MCP server with resolved path
+  const mcpServerPath = resolveMCPServerPath();
+  const dbPath = path.join(getKWOSDir(), 'documents.db');
+  mcpConfig.mcpServers['kw-os-documents'] = {
+    command: 'node',
+    args: [mcpServerPath],
+    env: {
+      KWOS_DB_PATH: dbPath,
+      KWOS_OLLAMA_URL: 'http://localhost:11434',
+    },
+  };
+
   // If IDEs were detected, write config to all of them
   // Otherwise fall back to primary IDE only
   let configPaths: string[] = [];
@@ -150,9 +165,32 @@ export async function initCommand(options: InitOptions): Promise<void> {
     log.success(`  ${target.displayName}: ${skillCount} skills, ${promptCount} prompts${masterInstalled ? ', master rule' : ''}`);
   }
 
-  // Step 5: Save Config
+  // Step 5: Document Intelligence Setup
+  log.header('Step 5: Document Intelligence');
+
+  // Ensure DB directory exists
+  const dbDir = getKWOSDir();
+  if (!fs.existsSync(dbDir)) {
+    fs.mkdirSync(dbDir, { recursive: true });
+  }
+  log.success(`  Database: ${dbPath}`);
+  log.success(`  MCP server: kw-os-documents`);
+
+  // Check Ollama availability for embeddings
+  const embedder = new LocalEmbedder();
+  const ollamaAvailable = await embedder.isAvailable().catch(() => false);
+  if (ollamaAvailable) {
+    log.success(`  Ollama: available (${embedder.model} model ready)`);
+    log.dim('  → Full hybrid search enabled (vector + keyword + knowledge graph)');
+  } else {
+    log.warn('  Ollama: not detected');
+    log.dim('  → Keyword search (BM25) will be used. For semantic search, install Ollama:');
+    log.dim('    https://ollama.com → then run: ollama pull nomic-embed-text');
+  }
+
+  // Step 6: Save Config
   const kwosConfig: KWOSConfig = {
-    version: '1.0.0',
+    version: '2.0.0',
     installedAt: new Date().toISOString(),
     ide,
     servers: servers.map(s => s.id),
@@ -169,9 +207,32 @@ export async function initCommand(options: InitOptions): Promise<void> {
   // Done
   log.header('KW-OS Initialized Successfully!');
   log.info(`IDE:      ${ide} (primary)${detectedIDEs.length > 1 ? ` + ${detectedIDEs.length - 1} other(s)` : ''}`);
-  log.info(`Servers:  ${installed} installed`);
+  log.info(`Servers:  ${installed} installed + kw-os-documents`);
   log.info(`Skills:   ${totalSkills} skills + ${totalPrompts} prompts (across ${ideTargets.length} IDE(s))`);
+  log.info(`DocIntel: ${ollamaAvailable ? 'Full (vector + keyword + graph)' : 'BM25 keyword search (install Ollama for full)'}`);
   log.info(`Configs:  ${configPaths.join(', ')}`);
   log.dim('\nYour IDE is now a Knowledge Worker. Restart your IDE to load the new MCP servers.');
   log.dim('Run "kw-os status" to check installation health.\n');
+}
+
+/**
+ * Resolve the absolute path to the compiled mcp-server.js.
+ * Works both when running from source (dev) and when installed as a package.
+ */
+function resolveMCPServerPath(): string {
+  // Try to find relative to this file's location
+  try {
+    const thisFile = fileURLToPath(import.meta.url);
+    const distDir = path.dirname(path.dirname(thisFile)); // dist/commands -> dist
+    const candidate = path.join(distDir, 'document', 'mcp-server.js');
+    if (fs.existsSync(candidate)) {
+      return candidate;
+    }
+  } catch {
+    // fileURLToPath may fail in some environments
+  }
+
+  // Fallback: resolve from package location
+  const packageDir = path.resolve(__dirname, '..', '..');
+  return path.join(packageDir, 'dist', 'document', 'mcp-server.js');
 }
