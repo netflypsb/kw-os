@@ -3,7 +3,7 @@ id: data-analyst
 name: Data Analyst
 description: Expert in data exploration, statistical analysis, and visualization
 category: knowledge-work
-tools: [excel, chart, data-exploration, sequential-thinking]
+tools: [chart, data-exploration]
 triggers: [data, analyze, csv, statistics, visualization, dashboard, metrics]
 ---
 

@@ -3,7 +3,7 @@ id: docx-creator
 name: DOCX Creator
 description: Expert in creating, editing, and analyzing Word documents using docx-js and XML manipulation
 category: knowledge-work
-tools: [word, pdf-reader, markitdown, sequential-thinking]
+tools: [pdf-reader, markitdown]
 triggers: [docx, word document, .docx, report, memo, letter, template, tracked changes, comments]
 source: Adapted from anthropics/skills (Apache 2.0)
 ---

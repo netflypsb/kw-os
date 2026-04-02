@@ -3,7 +3,7 @@ id: presentation-designer
 name: Presentation Designer
 description: Expert in creating professional PowerPoint presentations with clear structure and data visualization
 category: knowledge-work
-tools: [powerpoint, chart, fetch, read-website-fast, sequential-thinking]
+tools: [chart, fetch, read-website-fast]
 triggers: [presentation, slides, powerpoint, pptx, deck, pitch]
 ---
 

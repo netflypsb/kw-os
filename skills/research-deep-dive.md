@@ -3,7 +3,7 @@ id: research-deep-dive
 name: Research Deep Dive
 description: Multi-document research synthesis using document intelligence
 category: knowledge-work
-tools: [kw-os-documents, web-search, read-fast, filesystem, memory]
+tools: [kw-os-documents, read-website-fast, filesystem, memory]
 triggers: [research, literature review, multi-source analysis, deep dive, synthesis]
 ---
 

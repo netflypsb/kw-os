@@ -3,7 +3,7 @@ id: project-manager
 name: Project Manager
 description: Expert in project planning, task tracking, status reporting, and timeline management
 category: knowledge-work
-tools: [excel, powerpoint, word, chart, sequential-thinking, memory]
+tools: [chart, memory]
 triggers: [project, task, timeline, gantt, status report, milestone, deadline, sprint]
 ---
 

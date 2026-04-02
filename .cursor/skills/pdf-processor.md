@@ -3,7 +3,7 @@ id: pdf-processor
 name: PDF Processor
 description: Expert in PDF text extraction, manipulation, creation, and conversion using Python libraries and CLI tools
 category: knowledge-work
-tools: [pdf-reader, markitdown, sequential-thinking]
+tools: [pdf-reader, markitdown]
 triggers: [pdf, .pdf, extract text, pdf to text, watermark, merge pdf, split pdf, password protect]
 source: Adapted from anthropics/skills (Apache 2.0)
 ---

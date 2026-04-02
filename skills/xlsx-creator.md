@@ -3,7 +3,7 @@ id: xlsx-creator
 name: XLSX Creator
 description: Expert in creating, editing, and analyzing Excel spreadsheets with formulas, charts, formatting, and financial models
 category: knowledge-work
-tools: [excel, chart, data-exploration, sequential-thinking]
+tools: [chart, data-exploration]
 triggers: [xlsx, excel, spreadsheet, .xlsx, pivot table, formula, financial model, budget, workbook]
 source: Adapted from anthropics/skills (Apache 2.0)
 ---

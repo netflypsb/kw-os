@@ -3,7 +3,7 @@ id: global-intelligence
 name: Global Intelligence
 description: Monitor news, geopolitical signals, economic indicators, and market trends using browser automation
 category: knowledge-work
-tools: [playwright, read-website-fast, fetch, memory, chart, excel, sequential-thinking]
+tools: [playwright, read-website-fast, fetch, memory, chart]
 triggers: [news, trends, geopolitical, market, monitor, intelligence, brief, worldmonitor]
 ---
 

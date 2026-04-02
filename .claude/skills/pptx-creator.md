@@ -3,7 +3,7 @@ id: pptx-creator
 name: PPTX Creator
 description: Expert in creating, editing, and designing professional PowerPoint presentations programmatically
 category: knowledge-work
-tools: [powerpoint, chart, sequential-thinking, imagician]
+tools: [chart, imagician]
 triggers: [pptx, powerpoint, slides, presentation, deck, pitch deck, slide design]
 source: Adapted from anthropics/skills (Apache 2.0)
 ---

@@ -39,6 +39,79 @@
         "KWOS_DB_PATH": "C:\\Users\\netfl\\.kw-os\\documents.db",
         "KWOS_OLLAMA_URL": "http://localhost:11434"
       }
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "."
+      ]
+    },
+    "git": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-git"
+      ]
+    },
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ]
+    },
+    "fetch": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-fetch"
+      ]
+    },
+    "time": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-time"
+      ]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "@playwright/mcp@latest"
+      ]
+    },
+    "pdf-reader": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@sylphx/pdf-reader-mcp"
+      ]
+    },
+    "markitdown": {
+      "command": "uvx",
+      "args": [
+        "markitdown"
+      ]
+    },
+    "read-website-fast": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@just-every/mcp-read-website-fast"
+      ]
+    },
+    "json": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "json-mcp"
+      ]
+    },
+    "imagician": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@flowy11/imagician"
+      ]
     }
   }
 }

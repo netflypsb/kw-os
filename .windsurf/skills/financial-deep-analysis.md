@@ -3,7 +3,7 @@ id: financial-deep-analysis
 name: Financial Deep Analysis
 description: Analyze financial documents at scale — annual reports, 10-K filings, earning calls
 category: knowledge-work
-tools: [kw-os-documents, hledger, excel, chart, filesystem]
+tools: [kw-os-documents, hledger, chart, filesystem]
 triggers: [financial analysis, annual report, 10-K, earnings, financial statements]
 ---
 
