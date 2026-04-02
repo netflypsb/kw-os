@@ -75,7 +75,7 @@ function parseYamlArray(value: string): string[] {
   return value.split(',').map(s => s.trim()).filter(Boolean);
 }
 
-function getIDESkillsDir(ide: IDEType, cwd: string): string {
+export function getIDESkillsDir(ide: IDEType, cwd: string): string {
   const mapping: Record<IDEType, string> = {
     cursor: '.cursor/skills',
     windsurf: '.windsurf/skills',

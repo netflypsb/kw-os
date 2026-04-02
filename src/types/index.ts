@@ -82,3 +82,62 @@ export interface InitOptions {
   skills?: string;
   browser?: boolean;
 }
+
+// --- Skill System v2 Types ---
+
+export type SkillSourceType = 'builtin' | 'github' | 'url' | 'local';
+
+export interface SkillSourceBuiltin {
+  type: 'builtin';
+  name: string;
+}
+
+export interface SkillSourceGitHub {
+  type: 'github';
+  owner: string;
+  repo: string;
+  url: string;
+}
+
+export interface SkillSourceURL {
+  type: 'url';
+  url: string;
+}
+
+export interface SkillSourceLocal {
+  type: 'local';
+  path: string;
+}
+
+export type SkillSource = SkillSourceBuiltin | SkillSourceGitHub | SkillSourceURL | SkillSourceLocal;
+
+export interface FetchedSkill {
+  filename: string;
+  content: string;
+  source: string;
+}
+
+export interface SkillManifestEntry {
+  id: string;
+  source: string;
+  sourceType: SkillSourceType;
+  installedAt: string;
+  filename: string;
+  sha?: string;
+}
+
+export interface SkillManifest {
+  version: string;
+  skills: SkillManifestEntry[];
+}
+
+export interface SkillValidationResult {
+  valid: boolean;
+  safe: boolean;
+  warnings: string[];
+}
+
+export interface AddSkillOptions {
+  force?: boolean;
+  dryRun?: boolean;
+}

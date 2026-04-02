@@ -28,8 +28,10 @@ program
   .action(statusCommand);
 
 program
-  .command('add-skill <name>')
-  .description('Install a specific professional skill')
+  .command('add-skill <source>')
+  .description('Install skill(s) from built-in library, GitHub repo, URL, or local path')
+  .option('--force', 'Overwrite existing skills and bypass safety warnings')
+  .option('--dry-run', 'Show what would be installed without installing')
   .action(addSkillCommand);
 
 program

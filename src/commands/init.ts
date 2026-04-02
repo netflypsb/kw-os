@@ -87,13 +87,14 @@ export async function initCommand(options: InitOptions): Promise<void> {
   // Step 4: Install Skills & Rules
   log.header('Step 4: Install Skills & Rules');
 
-  const skillFilter = options.skills || 'all';
   const masterInstalled = installMasterRule(ide, cwd);
   if (masterInstalled) {
     log.success('Master Knowledge Worker rule installed');
   }
 
-  const skillCount = installSkills(skillFilter, ide, cwd);
+  // Always install ALL built-in skills — they are lightweight .md files
+  // that define the agent's core professional competencies
+  const skillCount = installSkills('all', ide, cwd);
   log.success(`${skillCount} professional skills installed`);
 
   const promptCount = installPrompts(ide, cwd);
