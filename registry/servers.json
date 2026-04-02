@@ -91,7 +91,7 @@
       "id": "powerpoint",
       "category": "office",
       "type": "python",
-      "repo": "dmytro-ustynov/office-powerpoint-mcp-server",
+      "repo": "GongRzhe/Office-PowerPoint-MCP-Server",
       "ref": "main",
       "apiRequired": false,
       "description": "Create/edit PowerPoint .pptx files locally via python-pptx"
@@ -109,7 +109,7 @@
       "id": "word",
       "category": "office",
       "type": "python",
-      "repo": "jlowans/mcp-python-docx",
+      "repo": "Rookie0x80/docx-mcp",
       "ref": "main",
       "apiRequired": false,
       "description": "Create/edit .docx documents via python-docx"
