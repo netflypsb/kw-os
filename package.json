@@ -1,7 +1,7 @@
 {
   "name": "kw-os",
-  "version": "1.0.7",
-  "description": "Knowledge Worker Operating System — turn any IDE into an AI-powered knowledge worker with local MCP servers, skills, and prompt templates. Zero API keys required.",
+  "version": "2.0.0",
+  "description": "Knowledge Worker Operating System — turn any IDE into an AI-powered knowledge worker with local MCP servers, skills, and document intelligence. Zero API keys required.",
   "type": "module",
   "main": "dist/cli.js",
   "bin": {
@@ -11,7 +11,6 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "start": "node dist/cli.js",
-    "test": "jest",
     "lint": "eslint src/",
     "clean": "rimraf dist"
   },
