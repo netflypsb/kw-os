@@ -5,6 +5,13 @@ import which from 'which';
 import semver from 'semver';
 import type { EnvironmentStatus, DependencyCheck, IDEDetection, IDEType } from '../types/index.js';
 import { getKWOSDir } from '../utils/platform.js';
+import {
+  loadProfiles,
+  resolveConfigPath,
+  resolveDetectionDir,
+  getAppDataDir,
+  type DetectedIDE,
+} from './config-profiles.js';
 
 const MIN_NODE = '18.0.0';
 const MIN_PYTHON = '3.10.0';
@@ -113,6 +120,73 @@ export function checkEnvironment(cwd: string): EnvironmentStatus {
     ide: detectIDE(cwd),
     existingInstall: fs.existsSync(kwosDir),
   };
+}
+
+/**
+ * Detect ALL IDEs present in the workspace and globally.
+ * Returns an array of detected IDEs sorted by confidence (highest first).
+ * Uses data-driven IDE profiles rather than hardcoded paths.
+ */
+export function detectAllIDEs(cwd: string): DetectedIDE[] {
+  const profiles = loadProfiles();
+  const detected: DetectedIDE[] = [];
+
+  for (const [id, profile] of Object.entries(profiles.profiles)) {
+    let confidence = 0;
+    const reasons: string[] = [];
+
+    // Check workspace directories
+    for (const dir of profile.detection.workspaceDirs) {
+      if (fs.existsSync(path.join(cwd, dir))) {
+        confidence += 50;
+        reasons.push(`Found ${dir}/ in workspace`);
+      }
+    }
+
+    // Check global directories
+    for (const dir of profile.detection.globalDirs) {
+      const resolved = resolveDetectionDir(
+        dir,
+        profile.detection.globalDirsRelativeTo,
+        cwd
+      );
+      if (fs.existsSync(resolved)) {
+        confidence += 30;
+        reasons.push(`Found global ${dir}/`);
+      }
+    }
+
+    // Check existing config files
+    for (const loc of profile.configLocations) {
+      const configPath = resolveConfigPath(loc, cwd);
+      if (fs.existsSync(configPath)) {
+        confidence += 40;
+        reasons.push(`Found existing ${path.basename(configPath)}`);
+      }
+    }
+
+    // CLI check (e.g., claude --version)
+    if (profile.detection.cliCheck) {
+      try {
+        execSync(profile.detection.cliCheck, {
+          encoding: 'utf-8',
+          timeout: 5000,
+          stdio: ['pipe', 'pipe', 'pipe'],
+        });
+        confidence += 30;
+        reasons.push('CLI available');
+      } catch {
+        // CLI not found — not an error
+      }
+    }
+
+    if (confidence > 0) {
+      detected.push({ id, profile, confidence, reasons });
+    }
+  }
+
+  // Sort by confidence descending
+  return detected.sort((a, b) => b.confidence - a.confidence);
 }
 
 export function validateEnvironment(env: EnvironmentStatus): string[] {

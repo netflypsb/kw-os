@@ -2,11 +2,12 @@ import type { InitOptions, IDEType } from '../types/index.js';
 import { log } from '../utils/logger.js';
 import { withSpinner } from '../utils/spinner.js';
 import { getKWOSDir, getConfigPath } from '../utils/platform.js';
-import { checkEnvironment, validateEnvironment } from '../core/env-check.js';
+import { checkEnvironment, validateEnvironment, detectAllIDEs } from '../core/env-check.js';
 import { resolveServerList } from '../core/server-registry.js';
 import { ServerInstaller } from '../core/server-installer.js';
 import { ConfigGenerator } from '../core/config-generator.js';
 import { installSkills, installMasterRule, installPrompts } from '../core/skill-installer.js';
+import { getProfile } from '../core/config-profiles.js';
 import fs from 'node:fs';
 import type { KWOSConfig } from '../types/index.js';
 
@@ -76,29 +77,78 @@ export async function initCommand(options: InitOptions): Promise<void> {
 
   log.info(`\n  Servers: ${installed} installed, ${failed} failed`);
 
-  // Step 3: Generate IDE Config
+  // Step 3: Generate IDE Configuration (multi-IDE aware)
   log.header('Step 3: Generate IDE Configuration');
+
+  const detectedIDEs = detectAllIDEs(cwd);
+  if (detectedIDEs.length > 0) {
+    log.info(`  Detected IDEs: ${detectedIDEs.map(d => `${d.profile.displayName} (${d.confidence}%)`).join(', ')}`);
+  } else {
+    log.dim(`  No IDEs auto-detected. Using --ide flag or default: ${ide}`);
+  }
 
   const configGen = new ConfigGenerator();
   const mcpConfig = configGen.generateConfig(servers);
-  const configPath = configGen.writeConfig(mcpConfig, ide, cwd);
-  log.success(`MCP config written to ${configPath}`);
 
-  // Step 4: Install Skills & Rules
-  log.header('Step 4: Install Skills & Rules');
+  // If IDEs were detected, write config to all of them
+  // Otherwise fall back to primary IDE only
+  let configPaths: string[] = [];
+  if (detectedIDEs.length > 0) {
+    // Ensure the primary IDE is in the detected list
+    const primaryInDetected = detectedIDEs.some(d => d.id === ide);
+    if (!primaryInDetected) {
+      const primaryProfile = getProfile(ide);
+      if (primaryProfile) {
+        detectedIDEs.push({ id: ide, profile: primaryProfile, confidence: 100, reasons: ['--ide flag'] });
+      }
+    }
 
-  const masterInstalled = installMasterRule(ide, cwd);
-  if (masterInstalled) {
-    log.success('Master Knowledge Worker rule installed');
+    const results = configGen.writeConfigForAllIDEs(mcpConfig, detectedIDEs, cwd, ide);
+    for (const result of results) {
+      if (result.success) {
+        log.success(`  ${result.ide} (${result.scope}): ${result.path}`);
+        configPaths.push(result.path);
+      } else {
+        log.warn(`  ${result.ide} (${result.scope}): Failed — ${result.error}`);
+      }
+    }
+  } else {
+    const singlePath = configGen.writeConfig(mcpConfig, ide, cwd);
+    log.success(`MCP config written to ${singlePath}`);
+    configPaths.push(singlePath);
   }
 
-  // Always install ALL built-in skills — they are lightweight .md files
-  // that define the agent's core professional competencies
-  const skillCount = installSkills('all', ide, cwd);
-  log.success(`${skillCount} professional skills installed`);
+  // Step 4: Install Skills & Rules (for all detected IDEs with skill dirs)
+  log.header('Step 4: Install Skills & Rules');
 
-  const promptCount = installPrompts(ide, cwd);
-  log.success(`${promptCount} prompt templates installed`);
+  let totalSkills = 0;
+  let totalPrompts = 0;
+
+  // Build list of IDEs to install skills for
+  const ideTargets: { id: string; displayName: string }[] = [];
+  if (detectedIDEs.length > 0) {
+    for (const detected of detectedIDEs) {
+      if (detected.profile.skillsDir) {
+        ideTargets.push({ id: detected.id, displayName: detected.profile.displayName });
+      }
+    }
+  }
+  // Ensure primary IDE is always included
+  if (!ideTargets.some(t => t.id === ide)) {
+    const primaryProfile = getProfile(ide);
+    const displayName = primaryProfile?.displayName || ide;
+    ideTargets.push({ id: ide, displayName });
+  }
+
+  for (const target of ideTargets) {
+    const targetIde = target.id as IDEType;
+    const masterInstalled = installMasterRule(targetIde, cwd);
+    const skillCount = installSkills('all', targetIde, cwd);
+    const promptCount = installPrompts(targetIde, cwd);
+    totalSkills += skillCount;
+    totalPrompts += promptCount;
+    log.success(`  ${target.displayName}: ${skillCount} skills, ${promptCount} prompts${masterInstalled ? ', master rule' : ''}`);
+  }
 
   // Step 5: Save Config
   const kwosConfig: KWOSConfig = {
@@ -106,7 +156,7 @@ export async function initCommand(options: InitOptions): Promise<void> {
     installedAt: new Date().toISOString(),
     ide,
     servers: servers.map(s => s.id),
-    skills: [], // Will be populated from installed skills
+    skills: [],
     installDir: getKWOSDir(),
   };
 
@@ -118,10 +168,10 @@ export async function initCommand(options: InitOptions): Promise<void> {
 
   // Done
   log.header('KW-OS Initialized Successfully!');
-  log.info(`IDE:      ${ide}`);
+  log.info(`IDE:      ${ide} (primary)${detectedIDEs.length > 1 ? ` + ${detectedIDEs.length - 1} other(s)` : ''}`);
   log.info(`Servers:  ${installed} installed`);
-  log.info(`Skills:   ${skillCount} skills + ${promptCount} prompts`);
-  log.info(`Config:   ${configPath}`);
+  log.info(`Skills:   ${totalSkills} skills + ${totalPrompts} prompts (across ${ideTargets.length} IDE(s))`);
+  log.info(`Configs:  ${configPaths.join(', ')}`);
   log.dim('\nYour IDE is now a Knowledge Worker. Restart your IDE to load the new MCP servers.');
   log.dim('Run "kw-os status" to check installation health.\n');
 }

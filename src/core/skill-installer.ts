@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { IDEType, SkillMeta } from '../types/index.js';
 import { log } from '../utils/logger.js';
+import { getProfileSkillsDir, getProfileRulesDir } from './config-profiles.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -76,6 +77,11 @@ function parseYamlArray(value: string): string[] {
 }
 
 export function getIDESkillsDir(ide: IDEType, cwd: string): string {
+  // Try profile-driven resolution first
+  const profileDir = getProfileSkillsDir(ide, cwd);
+  if (profileDir) return profileDir;
+
+  // Fallback to hardcoded mapping
   const mapping: Record<IDEType, string> = {
     cursor: '.cursor/skills',
     windsurf: '.windsurf/skills',
@@ -88,6 +94,11 @@ export function getIDESkillsDir(ide: IDEType, cwd: string): string {
 }
 
 function getIDERulesDir(ide: IDEType, cwd: string): string {
+  // Try profile-driven resolution first
+  const profileDir = getProfileRulesDir(ide, cwd);
+  if (profileDir) return profileDir;
+
+  // Fallback to hardcoded mapping
   const mapping: Record<IDEType, string> = {
     cursor: '.cursor/rules',
     windsurf: '.windsurf/rules',

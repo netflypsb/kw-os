@@ -43,6 +43,7 @@
     "templates/",
     "skills/",
     "prompts/",
+    "config-profiles/",
     "README.md"
   ],
   "dependencies": {

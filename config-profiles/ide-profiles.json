@@ -1,0 +1,159 @@
+{
+  "version": "1.0.0",
+  "profiles": {
+    "cursor": {
+      "displayName": "Cursor",
+      "configLocations": [
+        {
+          "scope": "project",
+          "filePath": ".cursor/mcp.json",
+          "relativeTo": "workspace",
+          "create": true
+        },
+        {
+          "scope": "global",
+          "filePath": ".cursor/mcp.json",
+          "relativeTo": "home",
+          "create": false
+        }
+      ],
+      "jsonRootKey": "mcpServers",
+      "detection": {
+        "workspaceDirs": [".cursor"],
+        "processNames": ["Cursor", "cursor"],
+        "globalDirs": [".cursor"],
+        "globalDirsRelativeTo": "home"
+      },
+      "skillsDir": ".cursor/skills",
+      "rulesDir": ".cursor/rules",
+      "notes": "Standard mcp.json format. Project-scoped at .cursor/mcp.json."
+    },
+    "windsurf": {
+      "displayName": "Windsurf",
+      "configLocations": [
+        {
+          "scope": "global",
+          "filePath": ".codeium/windsurf/mcp_config.json",
+          "relativeTo": "home",
+          "create": true
+        }
+      ],
+      "jsonRootKey": "mcpServers",
+      "detection": {
+        "workspaceDirs": [".windsurf"],
+        "processNames": ["Windsurf", "windsurf"],
+        "globalDirs": [".codeium/windsurf", ".codeium"],
+        "globalDirsRelativeTo": "home"
+      },
+      "skillsDir": ".windsurf/skills",
+      "rulesDir": ".windsurf/rules",
+      "notes": "Uses mcp_config.json at ~/.codeium/windsurf/. Supports ${env:VAR} interpolation. Global only."
+    },
+    "vscode": {
+      "displayName": "VS Code",
+      "configLocations": [
+        {
+          "scope": "project",
+          "filePath": ".vscode/mcp.json",
+          "relativeTo": "workspace",
+          "create": true
+        }
+      ],
+      "jsonRootKey": "servers",
+      "detection": {
+        "workspaceDirs": [".vscode"],
+        "processNames": ["Code", "code"],
+        "globalDirs": [],
+        "globalDirsRelativeTo": "home"
+      },
+      "skillsDir": ".vscode/skills",
+      "rulesDir": ".vscode/rules",
+      "notes": "Uses .vscode/mcp.json with 'servers' root key (not 'mcpServers'). Also supports mcp section in settings.json."
+    },
+    "claude": {
+      "displayName": "Claude Code",
+      "configLocations": [
+        {
+          "scope": "project",
+          "filePath": ".mcp.json",
+          "relativeTo": "workspace",
+          "create": true
+        }
+      ],
+      "jsonRootKey": "mcpServers",
+      "detection": {
+        "workspaceDirs": [".claude"],
+        "processNames": ["claude"],
+        "globalDirs": [".claude"],
+        "globalDirsRelativeTo": "home",
+        "cliCheck": "claude --version"
+      },
+      "skillsDir": ".claude/skills",
+      "rulesDir": ".claude/rules",
+      "notes": "Project scope uses .mcp.json at workspace root. User scope uses ~/.claude.json under mcpServers key."
+    },
+    "claude-desktop": {
+      "displayName": "Claude Desktop",
+      "configLocations": [
+        {
+          "scope": "global",
+          "filePath": "Claude/claude_desktop_config.json",
+          "relativeTo": "appdata",
+          "create": false
+        }
+      ],
+      "jsonRootKey": "mcpServers",
+      "detection": {
+        "workspaceDirs": [],
+        "processNames": ["Claude"],
+        "globalDirs": ["Claude"],
+        "globalDirsRelativeTo": "appdata"
+      },
+      "skillsDir": null,
+      "rulesDir": null,
+      "notes": "Desktop app. Config at %APPDATA%/Claude/ (Win) or ~/Library/Application Support/Claude/ (Mac). Only update existing config."
+    },
+    "antigravity": {
+      "displayName": "Antigravity",
+      "configLocations": [
+        {
+          "scope": "project",
+          "filePath": ".antigravity/mcp.json",
+          "relativeTo": "workspace",
+          "create": true
+        }
+      ],
+      "jsonRootKey": "mcpServers",
+      "detection": {
+        "workspaceDirs": [".antigravity"],
+        "processNames": ["Antigravity", "antigravity"],
+        "globalDirs": [],
+        "globalDirsRelativeTo": "home"
+      },
+      "skillsDir": ".antigravity/skills",
+      "rulesDir": ".antigravity/rules",
+      "notes": "Google's AI IDE. Follows standard mcp.json format."
+    },
+    "qoder": {
+      "displayName": "Qoder",
+      "configLocations": [
+        {
+          "scope": "project",
+          "filePath": ".qoder/mcp.json",
+          "relativeTo": "workspace",
+          "create": true
+        }
+      ],
+      "jsonRootKey": "mcpServers",
+      "detection": {
+        "workspaceDirs": [".qoder"],
+        "processNames": ["Qoder", "qoder"],
+        "globalDirs": [],
+        "globalDirsRelativeTo": "home"
+      },
+      "skillsDir": ".qoder/skills",
+      "rulesDir": ".qoder/rules",
+      "notes": "Standard mcp.json format."
+    }
+  }
+}
