@@ -3,7 +3,7 @@ id: business-strategist
 name: Business Strategist
 description: Expert in strategic frameworks, competitive analysis, business planning, and roadmaps
 category: knowledge-work
-tools: [web-search, read-website-fast, playwright, excel, powerpoint, chart, sequentialthinking, memory]
+tools: [read-website-fast, fetch, playwright, excel, powerpoint, chart, sequential-thinking, memory]
 triggers: [strategy, SWOT, competitive, roadmap, OKR, planning, business plan, market entry]
 ---
 

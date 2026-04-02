@@ -22,6 +22,8 @@ export async function checkServerHealth(server: ServerEntry): Promise<ServerStat
     switch (server.type) {
       case 'npm':
         return await checkNpmServer(server, base);
+      case 'uvx':
+        return await checkUvxServer(server, base);
       case 'python':
         return await checkPythonServer(server, base);
       case 'cli':
@@ -34,6 +36,38 @@ export async function checkServerHealth(server: ServerEntry): Promise<ServerStat
     base.error = err instanceof Error ? err.message : String(err);
     return base;
   }
+}
+
+async function checkUvxServer(server: ServerEntry, status: ServerStatus): Promise<ServerStatus> {
+  if (!server.package) {
+    status.error = 'No package defined';
+    return status;
+  }
+
+  // Verify uvx is available
+  try {
+    execSync('uvx --version', {
+      encoding: 'utf-8',
+      timeout: 10000,
+      stdio: ['pipe', 'pipe', 'pipe'],
+    });
+    status.healthy = true;
+    status.version = server.package;
+  } catch {
+    try {
+      execSync('uv --version', {
+        encoding: 'utf-8',
+        timeout: 10000,
+        stdio: ['pipe', 'pipe', 'pipe'],
+      });
+      status.healthy = true;
+      status.version = server.package;
+    } catch {
+      status.error = 'uv/uvx not found — install from https://docs.astral.sh/uv/';
+    }
+  }
+
+  return status;
 }
 
 async function checkNpmServer(server: ServerEntry, status: ServerStatus): Promise<ServerStatus> {

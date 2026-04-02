@@ -3,7 +3,7 @@ id: document-editor
 name: Document Editor
 description: Expert in professional document creation, editing, and formatting
 category: knowledge-work
-tools: [word, pdf-reader, markitdown, excel, sequentialthinking]
+tools: [word, pdf-reader, markitdown, excel, sequential-thinking]
 triggers: [document, report, write, docx, word, letter, memo, proposal]
 ---
 

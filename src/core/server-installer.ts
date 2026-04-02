@@ -27,6 +27,8 @@ export class ServerInstaller {
       switch (server.type) {
         case 'npm':
           return await this.installNpmServer(server);
+        case 'uvx':
+          return await this.installUvxServer(server);
         case 'python':
           return await this.installPythonServer(server);
         case 'cli':
@@ -48,29 +50,58 @@ export class ServerInstaller {
       return false;
     }
 
-    // For npm-type MCP servers, we verify npx can resolve the package.
-    // The actual server runs via npx at runtime, so no persistent install is needed.
-    // We just validate the package name is resolvable.
+    // Verify the npm package actually exists on the registry
     try {
-      execSync(`npx --yes ${server.package}@${server.version || 'latest'} --help`, {
+      execSync(`npm view ${server.package} version`, {
+        encoding: 'utf-8',
+        timeout: 30000,
+        stdio: ['pipe', 'pipe', 'pipe'],
+      });
+    } catch {
+      log.error(`npm package "${server.package}" not found on registry`);
+      return false;
+    }
+
+    // Pre-cache the package for faster runtime startup
+    try {
+      execSync(`npm cache add ${server.package}@${server.version || 'latest'}`, {
         encoding: 'utf-8',
         timeout: 60000,
         stdio: ['pipe', 'pipe', 'pipe'],
       });
     } catch {
-      // Many MCP servers don't have --help, so just pre-cache the package
-      try {
-        execSync(`npm cache add ${server.package}@${server.version || 'latest'}`, {
-          encoding: 'utf-8',
-          timeout: 60000,
-          stdio: ['pipe', 'pipe', 'pipe'],
-        });
-      } catch {
-        // npm cache add can fail in some environments; not critical
-      }
+      // npm cache add can fail in some environments; not critical
     }
 
-    // Mark as installed in our tracking
+    this.markInstalled(server);
+    return true;
+  }
+
+  private async installUvxServer(server: ServerEntry): Promise<boolean> {
+    if (!server.package) {
+      log.error(`No package specified for uvx server ${server.id}`);
+      return false;
+    }
+
+    // Verify uv/uvx is available
+    const uvxCmd = this.getUvxCmd();
+    if (!uvxCmd) {
+      log.error(`uvx/uv not found. Install uv: https://docs.astral.sh/uv/getting-started/installation/`);
+      return false;
+    }
+
+    // Pre-install the package so first runtime launch is fast
+    try {
+      execSync(`${uvxCmd} --version`, {
+        encoding: 'utf-8',
+        timeout: 10000,
+        stdio: ['pipe', 'pipe', 'pipe'],
+      });
+    } catch {
+      log.error(`uvx command failed — ensure uv is installed and in PATH`);
+      return false;
+    }
+
     this.markInstalled(server);
     return true;
   }
@@ -108,12 +139,18 @@ export class ServerInstaller {
     const pipCmd = this.getVenvPip(venvDir);
     const reqFile = path.join(serverDir, 'requirements.txt');
     if (fs.existsSync(reqFile)) {
-      execSync(`"${pipCmd}" install -r requirements.txt`, {
-        encoding: 'utf-8',
-        timeout: 300000,
-        cwd: serverDir,
-        stdio: ['pipe', 'pipe', 'pipe'],
-      });
+      try {
+        execSync(`"${pipCmd}" install -r requirements.txt`, {
+          encoding: 'utf-8',
+          timeout: 300000,
+          cwd: serverDir,
+          stdio: ['pipe', 'pipe', 'pipe'],
+        });
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        log.error(`pip install -r requirements.txt failed for ${server.id}: ${msg}`);
+        return false;
+      }
     }
 
     // Try pyproject.toml / setup.py install
@@ -127,8 +164,21 @@ export class ServerInstaller {
           cwd: serverDir,
           stdio: ['pipe', 'pipe', 'pipe'],
         });
-      } catch {
-        // Not all repos support editable install; non-fatal
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        log.warn(`pip install -e . had issues for ${server.id}: ${msg}`);
+        // Try non-editable install as fallback
+        try {
+          execSync(`"${pipCmd}" install .`, {
+            encoding: 'utf-8',
+            timeout: 300000,
+            cwd: serverDir,
+            stdio: ['pipe', 'pipe', 'pipe'],
+          });
+        } catch {
+          log.error(`pip install failed for ${server.id}`);
+          return false;
+        }
       }
     }
 
@@ -170,6 +220,20 @@ export class ServerInstaller {
       return 'python3';
     } catch {
       return 'python';
+    }
+  }
+
+  private getUvxCmd(): string | null {
+    try {
+      execSync('uvx --version', { stdio: ['pipe', 'pipe', 'pipe'] });
+      return 'uvx';
+    } catch {
+      try {
+        execSync('uv tool run --version', { stdio: ['pipe', 'pipe', 'pipe'] });
+        return 'uv tool run';
+      } catch {
+        return null;
+      }
     }
   }
 

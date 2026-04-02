@@ -2,6 +2,7 @@ export interface EnvironmentStatus {
   node: DependencyCheck;
   python: DependencyCheck;
   pip: DependencyCheck;
+  uv: DependencyCheck;
   git: DependencyCheck;
   ide: IDEDetection;
   existingInstall: boolean;
@@ -25,7 +26,7 @@ export type IDEType = 'cursor' | 'windsurf' | 'vscode' | 'claude' | 'antigravity
 
 export type ServerCategory = 'core' | 'browser' | 'office' | 'data' | 'finance' | 'research' | 'utils';
 
-export type ServerType = 'npm' | 'python' | 'cli';
+export type ServerType = 'npm' | 'python' | 'uvx' | 'cli';
 
 export interface ServerEntry {
   id: string;
@@ -41,6 +42,7 @@ export interface ServerEntry {
   // python type
   repo?: string;
   ref?: string;
+  moduleName?: string;
   // cli type
   installCmd?: string;
   postInstall?: string;

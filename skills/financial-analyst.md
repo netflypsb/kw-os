@@ -3,7 +3,7 @@ id: financial-analyst
 name: Financial Analyst
 description: Expert in financial analysis, modeling, reporting, and bookkeeping
 category: knowledge-work
-tools: [hledger, excel, powerpoint, chart, sequentialthinking]
+tools: [hledger, excel, powerpoint, chart, sequential-thinking]
 triggers: [financial, budget, accounting, balance sheet, income statement, forecast, P&L]
 ---
 

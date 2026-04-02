@@ -5,6 +5,7 @@ import { addSkillCommand } from './commands/add-skill.js';
 import { updateCommand } from './commands/update.js';
 import { listSkillsCommand } from './commands/list-skills.js';
 import { doctorCommand } from './commands/doctor.js';
+import { testCommand } from './commands/test.js';
 
 export const program = new Command();
 
@@ -48,3 +49,10 @@ program
   .command('doctor')
   .description('Diagnose and fix common issues')
   .action(doctorCommand);
+
+program
+  .command('test')
+  .description('Run test suite to verify all kw-os components')
+  .option('--suite <name>', 'Run specific suite: env|registry|skills|build|install|health', 'all')
+  .option('--verbose', 'Show detailed output for failures')
+  .action(testCommand);

@@ -27,6 +27,7 @@ export async function initCommand(options: InitOptions): Promise<void> {
   log.table('Node.js', env.node.version || 'not found', env.node.installed && env.node.meetsMinimum);
   log.table('Python', env.python.version || 'not found', env.python.installed && env.python.meetsMinimum);
   log.table('pip', env.pip.version || 'not found', env.pip.installed);
+  log.table('uv/uvx', env.uv.version || 'not found', env.uv.installed);
   log.table('Git', env.git.version || 'not found', env.git.installed);
   log.table('IDE', env.ide.type || 'not detected', env.ide.detected);
 

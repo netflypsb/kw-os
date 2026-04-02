@@ -3,7 +3,7 @@ id: research-synthesizer
 name: Research Synthesizer
 description: Expert in multi-source research, evidence synthesis, and citation management
 category: knowledge-work
-tools: [web-search, read-website-fast, fetch, playwright, memory, sequentialthinking, word]
+tools: [read-website-fast, fetch, playwright, memory, sequential-thinking, word]
 triggers: [research, investigate, find out, literature, sources, evidence, synthesis]
 ---
 

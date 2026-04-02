@@ -110,12 +110,21 @@ function detectIDE(cwd: string): IDEDetection {
   return { type: null, detected: false, configDir: null, configPath: null };
 }
 
+function checkUv(): DependencyCheck {
+  let result = checkCommand('uvx');
+  if (!result.installed) {
+    result = checkCommand('uv');
+  }
+  return result;
+}
+
 export function checkEnvironment(cwd: string): EnvironmentStatus {
   const kwosDir = getKWOSDir();
   return {
     node: checkNode(),
     python: checkPython(),
     pip: checkPip(),
+    uv: checkUv(),
     git: checkGit(),
     ide: detectIDE(cwd),
     existingInstall: fs.existsSync(kwosDir),

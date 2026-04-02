@@ -14,11 +14,10 @@
     "git": {
       "id": "git",
       "category": "core",
-      "type": "npm",
-      "package": "@modelcontextprotocol/server-git",
-      "version": "latest",
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-git"],
+      "type": "uvx",
+      "package": "mcp-server-git",
+      "command": "uvx",
+      "args": ["mcp-server-git"],
       "apiRequired": false,
       "description": "Repository management — status, diff, log, blame"
     },
@@ -36,33 +35,31 @@
     "fetch": {
       "id": "fetch",
       "category": "core",
-      "type": "npm",
-      "package": "@modelcontextprotocol/server-fetch",
-      "version": "latest",
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-fetch"],
+      "type": "uvx",
+      "package": "mcp-server-fetch",
+      "command": "uvx",
+      "args": ["mcp-server-fetch"],
       "apiRequired": false,
       "description": "Web content fetching converted to Markdown"
     },
-    "sequentialthinking": {
-      "id": "sequentialthinking",
+    "sequential-thinking": {
+      "id": "sequential-thinking",
       "category": "core",
       "type": "npm",
-      "package": "@modelcontextprotocol/server-sequentialthinking",
+      "package": "@modelcontextprotocol/server-sequential-thinking",
       "version": "latest",
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-sequentialthinking"],
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
       "apiRequired": false,
       "description": "Multi-step problem-solving reasoning chains"
     },
     "time": {
       "id": "time",
       "category": "core",
-      "type": "npm",
-      "package": "@modelcontextprotocol/server-time",
-      "version": "latest",
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-time"],
+      "type": "uvx",
+      "package": "mcp-server-time",
+      "command": "uvx",
+      "args": ["mcp-server-time"],
       "apiRequired": false,
       "description": "Timezone awareness and date manipulation"
     },
@@ -77,22 +74,13 @@
       "apiRequired": false,
       "description": "MCP-native browser automation — 35+ tools, accessibility-tree based"
     },
-    "agent-browser": {
-      "id": "agent-browser",
-      "category": "browser",
-      "type": "cli",
-      "package": "agent-browser",
-      "installCmd": "npm install -g agent-browser",
-      "postInstall": "agent-browser install",
-      "apiRequired": false,
-      "description": "Fast Rust CLI browser automation for AI agents — snapshot-ref workflow"
-    },
     "powerpoint": {
       "id": "powerpoint",
       "category": "office",
       "type": "python",
       "repo": "GongRzhe/Office-PowerPoint-MCP-Server",
       "ref": "main",
+      "moduleName": "office_powerpoint_mcp_server",
       "apiRequired": false,
       "description": "Create/edit PowerPoint .pptx files locally via python-pptx"
     },
@@ -102,6 +90,7 @@
       "type": "python",
       "repo": "haris-musa/excel-mcp-server",
       "ref": "main",
+      "moduleName": "excel_mcp_server",
       "apiRequired": false,
       "description": "Full .xlsx manipulation — charts, pivot tables, formatting"
     },
@@ -111,6 +100,7 @@
       "type": "python",
       "repo": "Rookie0x80/docx-mcp",
       "ref": "main",
+      "moduleName": "docx_mcp",
       "apiRequired": false,
       "description": "Create/edit .docx documents via python-docx"
     },
@@ -118,21 +108,22 @@
       "id": "pdf-reader",
       "category": "office",
       "type": "npm",
-      "package": "pdf-reader-mcp",
+      "package": "@sylphx/pdf-reader-mcp",
       "version": "latest",
       "command": "npx",
-      "args": ["-y", "pdf-reader-mcp"],
+      "args": ["-y", "@sylphx/pdf-reader-mcp"],
       "apiRequired": false,
       "description": "Extract text, images, and metadata from PDF files"
     },
     "markitdown": {
       "id": "markitdown",
       "category": "office",
-      "type": "python",
-      "repo": "microsoft/markitdown",
-      "ref": "main",
+      "type": "uvx",
+      "package": "markitdown",
+      "command": "uvx",
+      "args": ["markitdown"],
       "apiRequired": false,
-      "description": "Convert any document (PDF/Office/HTML) to Markdown"
+      "description": "Convert any document (PDF/Office/HTML) to Markdown (Microsoft)"
     },
     "chart": {
       "id": "chart",
@@ -151,19 +142,9 @@
       "type": "python",
       "repo": "reading-plus-ai/mcp-server-data-exploration",
       "ref": "main",
+      "moduleName": "mcp_server_data_exploration",
       "apiRequired": false,
       "description": "Autonomous CSV/dataset analysis with intelligent insights"
-    },
-    "vegalite": {
-      "id": "vegalite",
-      "category": "data",
-      "type": "npm",
-      "package": "mcp-vegalite-server",
-      "version": "latest",
-      "command": "npx",
-      "args": ["-y", "mcp-vegalite-server"],
-      "apiRequired": false,
-      "description": "Generate visualizations from data using Vega-Lite"
     },
     "hledger": {
       "id": "hledger",
@@ -171,6 +152,7 @@
       "type": "python",
       "repo": "iiAtlas/hledger-mcp",
       "ref": "main",
+      "moduleName": "hledger_mcp",
       "apiRequired": false,
       "description": "Double-entry bookkeeping — balance sheets, income statements"
     },
@@ -184,17 +166,6 @@
       "args": ["-y", "coincap-mcp"],
       "apiRequired": false,
       "description": "Real-time cryptocurrency market data (public API, no auth)"
-    },
-    "web-search": {
-      "id": "web-search",
-      "category": "research",
-      "type": "npm",
-      "package": "web-search-mcp",
-      "version": "latest",
-      "command": "npx",
-      "args": ["-y", "web-search-mcp"],
-      "apiRequired": false,
-      "description": "Local web search and summaries via DuckDuckGo/Bing scraping"
     },
     "read-website-fast": {
       "id": "read-website-fast",
@@ -222,10 +193,10 @@
       "id": "imagician",
       "category": "utils",
       "type": "npm",
-      "package": "imagician",
+      "package": "@flowy11/imagician",
       "version": "latest",
       "command": "npx",
-      "args": ["-y", "imagician"],
+      "args": ["-y", "@flowy11/imagician"],
       "apiRequired": false,
       "description": "Image editing — resize, crop, format conversion via sharp"
     },

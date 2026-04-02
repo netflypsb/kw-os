@@ -47,6 +47,8 @@ export class ConfigGenerator {
     switch (server.type) {
       case 'npm':
         return this.npmServerConfig(server);
+      case 'uvx':
+        return this.uvxServerConfig(server);
       case 'python':
         return this.pythonServerConfig(server);
       case 'cli':
@@ -65,10 +67,21 @@ export class ConfigGenerator {
     };
   }
 
+  private uvxServerConfig(server: ServerEntry): MCPServerConfig {
+    return {
+      command: server.command || 'uvx',
+      args: server.args || [server.package || server.id],
+    };
+  }
+
   private pythonServerConfig(server: ServerEntry): MCPServerConfig {
     const serverDir = path.join(this.serversDir, server.category, server.id);
     const isWin = process.platform === 'win32';
-    const venvPython = path.join(serverDir, '.venv', isWin ? 'Scripts' : 'bin', 'python');
+    const pythonBin = isWin ? 'python.exe' : 'python';
+    const venvPython = path.join(serverDir, '.venv', isWin ? 'Scripts' : 'bin', pythonBin);
+
+    // Use explicit moduleName from registry if provided
+    const moduleName = server.moduleName || server.id.replace(/-/g, '_');
 
     // Try to find the main entry point
     const candidates = [
@@ -76,7 +89,8 @@ export class ConfigGenerator {
       path.join(serverDir, 'server.py'),
       path.join(serverDir, 'main.py'),
       path.join(serverDir, 'src', 'main.py'),
-      path.join(serverDir, 'src', `${server.id.replace(/-/g, '_')}_mcp`, 'server.py'),
+      path.join(serverDir, 'src', `${moduleName}`, 'server.py'),
+      path.join(serverDir, 'src', `${moduleName}`, '__main__.py'),
     ];
 
     let entryPoint = candidates.find(c => fs.existsSync(c));
@@ -85,7 +99,7 @@ export class ConfigGenerator {
       // Fallback: use -m to run as module
       return {
         command: venvPython,
-        args: ['-m', server.id.replace(/-/g, '_')],
+        args: ['-m', moduleName],
         env: { PYTHONPATH: serverDir },
       };
     }

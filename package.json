@@ -11,6 +11,13 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "start": "node dist/cli.js",
+    "test": "node bin/kw-os.js test",
+    "test:env": "node bin/kw-os.js test --suite env",
+    "test:registry": "node bin/kw-os.js test --suite registry",
+    "test:skills": "node bin/kw-os.js test --suite skills",
+    "test:build": "node bin/kw-os.js test --suite build",
+    "test:install": "node bin/kw-os.js test --suite install",
+    "test:health": "node bin/kw-os.js test --suite health",
     "lint": "eslint src/",
     "clean": "rimraf dist"
   },
